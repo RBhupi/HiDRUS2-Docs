@@ -1,0 +1,562 @@
+\documentclass[aspectratio=169]{beamer}
+
+
+\usepackage{draftwatermark}
+\setbeamercolor{background canvas}{bg=}%transparent canvas
+
+
+\usepackage{graphicx}
+
+\definecolor{egyptianblue}{rgb}{0.06, 0.2, 0.65}
+\usepackage{xcolor}
+
+\setbeamercovered{transparent}
+%\usepackage{pxfonts}
+\usepackage{listings}
+\lstset{language=bash,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{cyan}\ttfamily,
+                stringstyle=\color{orange}\ttfamily,
+                commentstyle=\color{gray}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\small\sffamily,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+\sffamily
+
+\usepackage{tipa}
+
+\usepackage{natbib}
+
+\titlegraphic{\includegraphics[height=.2\textheight]{../hidrus-logo.pdf}}
+
+\begin{document}
+%--------------------------------------------------------------------------
+%title page
+%--------------------------------------------------------------------------
+\title{\Large \noindent \textbf{\textcolor{egyptianblue}{Notes on \underline{Hi}gh-resolution \underline{D}ownscaling of \underline{R}ainfall \underline{U}sing \underline{S}TEPS (HiDRUS)}}}  
+
+\author{\emph{\href{www.baraut.info}{Bhupendra A Raut}}} 
+\date{\today} 
+
+\frame{\titlepage} 
+\frame{\frametitle{Table of contents}\tableofcontents} 
+
+%--------------------------------------------------------------------------
+%Introduction
+%--------------------------------------------------------------------------
+\section{Introduction}
+%
+\begin{frame}{STEPS} %STEPS
+The  \underline{S}hort \underline{T}erm \underline{E}nsemble \underline{P}rediction \underline{S}ystem (STEPS)  has several modules to 
+
+\begin{itemize}
+\item disaggregate rainfall \citep{seed2013steps}
+\item simulate time-series of mean area rainfall \citep{seed2000BL}
+\item make design-storm simulations \citep{seed1999steps} 
+\item and to produce seamless forecast when cascaded with NWP models \citep{bowler2006steps}
+\end{itemize}
+
+STEPS is mainly used for nowcasting and multiple simulations of the past extreme events.
+\end{frame}
+%
+%
+%
+%
+%
+\begin{frame}{HiDRUS} %HiDRUS
+\begin{itemize}
+\item HiDRUS\footnote{Pronounced ``\textipa{ha\;Idr@s}''} is an implementation of the STEPS library to downscale GCM/RCM rainfall to a very high space-time resolution (1 km, 6 minutes).
+\item HiDRUS-1 is a fully stochastic downscaling scheme which uses a broken-line model to generate the mean area rainfall time-series (MARTS). Linear regression models are use to generate cascade parameters for each time-step. 
+\item HiDRUS-2 uses sampling of the past MARTS to generate future rainfall projections. 
+\end{itemize}
+This document describes the steps in running HiDRUS-2 model to downscale rainfall.
+\end{frame}
+%
+%%
+%
+%
+%
+\section{Running HiDRUS-2}
+%
+\begin{frame}{Running HiDRUS-2}
+\begin{columns}
+\column{0.6\textwidth}
+HiDRUS-2 methodology has two configurations.
+\begin{enumerate}
+\item \textbf{perfect mode (A)} to downscale radar data with computed parameters. This is used for model validation, model bias \& uncertainty estimation.
+\item \textbf{projection mode (B)} to be run with GCM/RCM/reanalysis data.
+\end{enumerate}
+The flow-digram shows important stages of the \emph{perfect} and the \emph{projection} modes of HiDRUS-2 methodology.
+
+\column{0.5\textwidth}
+	\includegraphics[height=3in]{../fig/flow.pdf}
+\end{columns}
+\end{frame}
+%
+%
+%
+%
+%
+%--------------------------------------------------------------------------
+%Compute parameters
+%--------------------------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Compute Cascade Parameters}
+\begin{columns}
+\column{0.6\textwidth}
+\begin{lstlisting}[style=BashInputStyle]
+$mkcascparm <fPath> <rn>
+\end{lstlisting}
+
+fPath - path of the input directory,\\
+rn - Radar id. This will be suffixed to the output file name.
+
+\begin{lstlisting}[style=BashInputStyle]
+$./mkcascparm ~/data/ MLB
+$cd ./c_parms_dbz
+$ls
+ 20100108_MLB.prm
+ ...
+ ...
+ 20101224_MLB.prm
+ ...
+ RainPMatch_MLB.ima  
+ RainPMatch_MLB.ind  
+ RainPMatch_MLB.pjn
+ ...
+\end{lstlisting}
+
+\column{0.4\textwidth}
+	\includegraphics[height=2in]{../fig/casc_prm.pdf}
+\end{columns}
+
+\end{frame}
+%
+%
+%
+%--------------------------------------------------------------------------
+%Perfect Run
+%--------------------------------------------------------------------------
+%
+\section{Perfect Run}
+
+\begin{frame}[fragile]
+\frametitle{Perfect Run - Make Parameters}
+
+\begin{columns}
+
+\column{0.4\textwidth}
+\includegraphics[height=2.5in, width=2in]{../fig/perf_prm.pdf}
+
+\column{0.6\textwidth}
+\begin{lstlisting}[style=BashInputStyle] 
+$vim mk-HiDRUS2-Parms_pppr.R
+
+#set parameters directory
+setwd("~/data/c_parms_dbz/")
+
+#input file name pattern
+fn_pat <- "_MLB.prm"  
+
+#desired output file name
+ofName<-"simParm-2010.txt"
+\end{lstlisting}
+
+Run the script.
+\begin{lstlisting}[style=BashInputStyle]
+$Rscript mk-HiDRUS2-Parms_pppr.R 
+\end{lstlisting}
+\end{columns}
+
+\end{frame}
+%
+%
+%
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Perfect Run - Config and Run}
+
+\begin{columns}
+\column{0.4\textwidth}
+	\includegraphics[width=2.5in]{../fig/runPerf_h2.pdf}
+
+\column{0.6\textwidth}
+Provide appropriate paths in config.txt file
+\begin{lstlisting}[style=BashInputStyle]
+$vim config.txt
+
+outFilePathPrefix = /path/pSim2010 ;
+pMatchPathPrefix = /path/RainPMatch_MLB ;
+prmFileName = /path/simParm-2010.txt ;
+\end{lstlisting}
+
+
+\begin{lstlisting}[style=BashInputStyle] 
+$hidrus2 ./config.txt ens_id
+\end{lstlisting}
+If you give ens\_id here then ens\_id in config.txt will be overridden. This feature can be used to make several simulations with the same config file.
+
+\end{columns}
+\end{frame}
+%
+%
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Perfect Run - Excerpt of a PBS Job Script}
+\begin{lstlisting}
+#!/bin/bash
+# Example submission of PBS jobs in a loop
+NUMBERS=$(seq 1 100) 
+for NUM in ${NUMBERS}
+do
+  NAME=h2pp${NUM}
+  echo "Submitting: ${NAME}"	
+  PBS="#!/bin/bash\n\
+  #PBS -N ${NAME}\n\
+  #PBS -l walltime=10:00:00\n\
+  #PBS -l mem=500MB\n\
+  #PBS -l wd\n\
+  ./hidrus2 ./config.txt ${NUM}"
+	echo -e ${PBS} | qsub 
+	echo "done."
+done
+
+\end{lstlisting}
+
+\end{frame}
+%
+%
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Perfect Run - Output}
+In output directory
+\begin{lstlisting}[style=BashInputStyle]
+$ls
+pSim2010_001_tStat.asc  pSim2010_055_tStat.asc
+pSim2010_002_tStat.asc  pSim2010_056_tStat.asc
+...
+pSim2010_001.nc  pSim2010_055.nc
+pSim2010_002.nc  pSim2010_056.nc
+...
+\end{lstlisting}
+
+The files ``$\ast\_tStat.asc$'' contains domain average properties for all rainy time-steps.
+\begin{lstlisting}[style=BashInputStyle]
+$head pSim2010_055_tStat.asc
+time	 pm	in_dbz_fmean	in_dbz_fstd	in_rain_fmean	in_rain_fstd	in_rain_cmean
+in_rFrac	in_east	in_south	out_dbz_fmean	out_dbz_fstd	out_rain_fmean	
+out_rain_fstd	out_rain_cmean	out_rFrac
+1200018240	1200018273	1.83	 7.65	0.52	 3.93	8.6 3	0.06	 2.0	 0.2 	
+1.83	 7.64	0.52 	3.92	 8.62 	0.06
+\end{lstlisting}
+
+\end{frame}
+%
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Perfect Run - Output}
+\begin{lstlisting}[style=BashInputStyle]
+$ncdump -h pSim2010_055.nc 
+netcdf pSim2010_055 {
+dimensions:
+	lat = 230 ;
+	lon = 256 ;
+	time = UNLIMITED ; // (23000 currently)
+variables:
+	float lat(lat) ;
+    lat:units = "degrees_north" ;
+	float lon(lon) ;
+    lon:units = "degrees_east" ;
+	int64 time(time) ;
+    time:units = "seconds since 1970-01-01 00:00:00 UTC" ;
+	float rain(time, lat, lon) ;
+    rain:units = "mm/hr" ;
+    rain:_FillValue = -999.f ;
+    rain:long_name = "instantaneous rainrate" ;
+    rain:_description = "perfect_simulations" ;
+// global attributes:
+		:HiDRUS = "developed at Monash University and Bureau of Meteorology." ;
+		:creator_name = "Bhupendra A. Raut and Alan W. Seed" ;
+		:creator_webpage = "www.baraut.info" ;
+		:_institution = "School of Earth Atmosphere and Environment, Monash University" ;
+		:_acknowledgment = "Bureau of Meteorology and CRC for Water Sensitive Cities" ;
+		:_project = "B1.1: Cities as Water Supply Catchments – Urban Rainfall in a changing climate" ;
+		:_project_leaders = "Christian Jakob, Michael J. Reeder" ;
+		:date_created = "Tue Sep 29 11:53:59 2015" ;
+}
+
+\end{lstlisting}
+
+
+\end{frame}
+%
+%
+%
+%
+%
+\section{Projection Run}
+\begin{frame}[fragile]
+\frametitle{Projection Run - Make Rain Events Library}
+\begin{lstlisting}[style=BashInputStyle]
+$vim mk_rainEvents_lib.R
+\end{lstlisting}
+
+\begin{lstlisting}[language=R]
+#set working directory to parameters directory
+setwd("/home/bhupendra/data/c_parms_dbz/")
+ofileName<-"RainLib_2010_MLB"  #no extension
+
+#--------- Some initialisation settings----------------#
+window <- 240   #number of point in sampled ts
+cut_off=0.1     #mean area rain mm/hr
+duration=5      #min duration of rain in tSteps
+nprms=65        # number of parameters 
+fn_pat <- "_MLB.prm"    #file name pattern 
+\end{lstlisting}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Projection Run - Make Rain Events Library}
+\begin{columns}
+
+\column{0.6\textwidth}
+\begin{lstlisting}[style=BashInputStyle] 
+$Rscript mk_rainEvents_lib.R
+$ls 
+RainLib_2010_MLB.nc RainLib_2010_MLB.pdf
+\end{lstlisting}
+The cascade parameters for each event will be stored in the NetCDF file.
+\begin{lstlisting}[style=BashInputStyle] 
+$ncdump -h RainLib_2010_MLB.nc
+dimensions:
+    id = UNLIMITED ; // (1546 currently)
+    prms = 65 ;
+    tstep = 240 ;
+variables:
+    int id(id) ;
+    id:long_name = "identity number 
+    for the event" ;
+	double ts_prms(id, tstep, prms) ;
+    ts_prms:long_name = "cascade parameters" ;
+\end{lstlisting}
+
+\column{0.5\textwidth}
+\includegraphics[width=2.8in]{../fig/mkRainlib.pdf}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Projection Run - Make Synoptic Conditions Library}
+\begin{columns}
+
+\column{0.6\textwidth}
+At this stage auxiliary data can be stored for the back-identification of events in future projections.
+This may include 
+\begin{itemize}
+\item Weather Regimes
+\item vertical profiles of U, V, humidity etc.
+\item MSLP patterns, 
+\item accumulation of rain from Rain-gauge, TRMM
+\end{itemize}
+
+\column{0.5\textwidth}
+\includegraphics[width=2.8in]{../fig/mkRainlib.pdf}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Projection Run - Select Future Parameters}
+\begin{columns}
+
+\column{0.45\textwidth}
+\begin{itemize}
+\item An example script mk-HiDRUS2-Parms.R is provided for selecting future days.
+\item Users will have to use their matching criterion for the past and future days.
+\end{itemize}
+
+\begin{lstlisting}[style=BashInputStyle] 
+$cdo fldmean -sellonlatbox,143.5,146,-36.5,-39 ifile.nc ofile.nc
+\end{lstlisting}
+
+
+\column{0.6\textwidth}
+\includegraphics[width=3.5in]{../fig/selFuturePrm.pdf}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Projection Run - Config and Run}
+\begin{columns}
+
+\column{0.52\textwidth}
+\begin{itemize}
+\item Running HiDRUS-2 for projection is same as for the perfect run.
+\item An optional argument ``parmFilePath''  can be used to provide parameters file path. This will over-write the path of the parameter file in config.txt
+\item This allows us to run HiDRUS-2 for several input parameter files without modifying the config file.
+\end{itemize}
+possible run commands
+\begin{lstlisting}[style=BashInputStyle]
+$hidrus2 ./config.txt 
+$hidrus2 ./config.txt ens_id
+$hidrus2 ./config.txt ens_id parmFilePath
+\end{lstlisting}
+
+\column{0.5\textwidth}
+\includegraphics[width=2.9in]{../fig/runH2.pdf}
+
+\end{columns}
+\end{frame}
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Projection Run - PBS Job Script}
+\begin{lstlisting}[language=Python]
+from popen2 import popen2
+import time
+
+yesno='no'
+yesno = raw_input("Type 'YeSs' to submit the HiDRUS jobs.\t")
+
+if(yesno!='YeSs'):
+    quit()
+
+#input for the command
+cfile="./config.txt"
+ens=range(1, 101)
+pfile_prefix="./h2parms_erai_2008-14_"
+
+\end{lstlisting}
+
+\end{frame}
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Projection Run - PBS Job Script (Contd.)}
+\begin{lstlisting}[language=Python]
+# Loop over your jobs
+for ens_id in ens:
+    #make input parameters file name
+    pfile=pfile_prefix+ str(ens_id)+ ".txt"
+     
+    # Customize your options here
+    job_name = "h2era_"+str(ens_id)
+    walltime = "10:00:00"
+    mem="500MB"
+    qtype = "normal"
+
+    command = "./hidrus2 %s %d %s" %(cfile, ens_id, pfile)
+
+\end{lstlisting}
+
+\end{frame}
+%
+%
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Projection Run - PBS Job Script (Contd.)}
+\begin{lstlisting}[language=Python]
+ job_string = """#!/bin/bash
+    #PBS -N %s
+    #PBS -q %s
+    #PBS -l walltime=%s
+    #PBS -l mem=%s
+    #PBS -P k10
+    #PBS -l wd
+    #PBS -m a
+    #PBS -M bhupendra.raut@monash.edu
+%s""" % (job_name, qtype, walltime, mem, command)
+    
+    # Open a pipe to the qsub command.
+    output, input = popen2('qsub')
+    # Send job_string to qsub
+    input.write(job_string)
+    input.close()
+    
+    #Print job and the system response as it's submitted
+    print "\tsubmiting... "+job_name
+    print output.read()
+    time.sleep(0.5)
+\end{lstlisting}
+
+\end{frame}
+%
+%
+%
+%
+%
+%
+\begin{frame}[fragile]
+\frametitle{Projection Run - PBS Job Script (Contd.)}
+\begin{lstlisting}[language=Python]
+    #Print job and the system response as it's submitted
+    print "\tsubmiting... "+job_name
+    print output.read()
+    time.sleep(0.5)
+\end{lstlisting}
+
+\end{frame}
+%
+%
+%
+%
+%
+
+
+\section{List of Programs and Scripts}
+\begin{frame}{List of Programs and Scripts}
+\begin{enumerate}
+\item \textbf{mkCascParm\_dbz} : This C++ program computes STEPS parameters required to produce HiDRUS simulations.
+\item \textbf{mk\_rainEvents\_lib.R} : This script creates library of rain-events and their parameters.
+
+\item \textbf{add\_mslp\_uv\_rainlib.ncl} : This script is an example of adding relevant synoptic data to the rainlib for the better identification of the future days.
+\item \textbf{mk-HiDRUS2-Parms.R} : This script taken in rain library files produced by above scripts and GCM/RCM data and assigns rainfall events to future days. Prints all the required parameters in an ascii file.
+\item \textbf{hidrus2\_dbz} : This is the main simulation program which takes in the file generated by the \emph{mk-HiDRUS2-Parms.R} and produces downscaled rainfall realisation. You can run this program several time with the same input to get ensemble of realizations.
+\item \textbf{nc2nc\_ents} : This program extracts the rainfall time-series at a given location from 100s of HiDRUS simulations and writes it in a netcdf file.
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{References}
+\bibliographystyle{plain}
+\bibliography{../references}
+\end{frame}
+
+\end{document}

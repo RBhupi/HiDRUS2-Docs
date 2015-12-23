@@ -1,0 +1,16 @@
+*[ao]
+*~
+*swp
+*spl
+*aux
+*synctex.gz
+*bbl
+*blg
+*toc
+*log
+*out
+*bib
+*.nav
+*.pyg
+*.snm
+*.vrb

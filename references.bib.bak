@@ -1,0 +1,211 @@
+% This file was created with JabRef 2.10b2.
+% Encoding: UTF-8
+
+
+@Article{bates1998stochastic,
+  Title                    = {Stochastic downscaling of numerical climate model simulations},
+  Author                   = {Bates, Bryson C and Charles, Stephen P and Hughes, James P},
+  Journal                  = {Environmental Modelling \& Software},
+  Year                     = {1998},
+  Number                   = {3},
+  Pages                    = {325--331},
+  Volume                   = {13},
+
+  Publisher                = {Elsevier}
+}
+
+@Article{bowler2006steps,
+  Title                    = {STEPS: A probabilistic precipitation forecasting scheme which merges an extrapolation nowcast with downscaled NWP},
+  Author                   = {Bowler, Neill E and Pierce, Clive E and Seed, Alan W},
+  Journal                  = {Quarterly Journal of the Royal Meteorological Society},
+  Year                     = {2006},
+  Number                   = {620},
+  Pages                    = {2127--2156},
+  Volume                   = {132},
+
+  Publisher                = {Royal Meteorological Society}
+}
+
+@Article{conway1998use,
+  Title                    = {The use of weather types and air flow indices for GCM downscaling},
+  Author                   = {Conway, D and Jones, PD},
+  Journal                  = {Journal of Hydrology},
+  Year                     = {1998},
+  Pages                    = {348--361},
+  Volume                   = {212},
+
+  Publisher                = {Elsevier}
+}
+
+@Article{deidda1999multifractal,
+  Title                    = {Multifractal analysis and simulation of rainfall fields in space},
+  Author                   = {Deidda, Roberto},
+  Journal                  = {Physics and Chemistry of the Earth, Part B: Hydrology, Oceans and Atmosphere},
+  Year                     = {1999},
+  Number                   = {1},
+  Pages                    = {73--78},
+  Volume                   = {24},
+
+  Publisher                = {Elsevier}
+}
+
+@Article{harris2001multiscale,
+  Title                    = {Multiscale statistical properties of a high-resolution precipitation forecast},
+  Author                   = {Harris, Daniel and Foufoula-Georgiou, Efi and Droegemeier, Kelvin K and Levit, Jason J},
+  Journal                  = {Journal of Hydrometeorology},
+  Year                     = {2001},
+  Number                   = {4},
+  Pages                    = {406--418},
+  Volume                   = {2}
+}
+
+@Article{hughes1994class,
+  Title                    = {A class of stochastic models for relating synoptic atmospheric patterns to regional hydrologic phenomena},
+  Author                   = {Hughes, James P and Guttorp, Peter},
+  Journal                  = {Water Resources Research},
+  Year                     = {1994},
+  Number                   = {5},
+  Pages                    = {1535--1546},
+  Volume                   = {30},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@InProceedings{le1961stochastic,
+  Title                    = {A stochastic description of precipitation},
+  Author                   = {Le Cam, L},
+  Booktitle                = {Proceedings of the fourth Berkeley symposium on mathematical statistics and probability},
+  Year                     = {1961},
+  Organization             = {University of California Berkeley, Calif},
+  Pages                    = {165--186},
+  Volume                   = {3}
+}
+
+@Article{menabde1997multiscaling,
+  Title                    = {Multiscaling properties of rainfall and bounded random cascades},
+  Author                   = {Menabde, Merab and Harris, Daniel and Seed, Alan and Austin, Geoff and Stow, David},
+  Journal                  = {Water Resources Research},
+  Year                     = {1997},
+  Number                   = {12},
+  Pages                    = {2823--2830},
+  Volume                   = {33},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{menabde1997self,
+  Title                    = {Self-similar random fields and rainfall simulation},
+  Author                   = {Menabde, Merab and Seed, Alan and Harris, Daniel and Austin, Geoff},
+  Journal                  = {Journal of Geophysical Research: Atmospheres (1984--2012)},
+  Year                     = {1997},
+  Number                   = {D12},
+  Pages                    = {13509--13515},
+  Volume                   = {102},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{molini2009revisiting,
+  Title                    = {Revisiting rainfall clustering and intermittency across different climatic regimes},
+  Author                   = {Molini, Annalisa and Katul, Gabriel G and Porporato, Amilcare},
+  Journal                  = {Water resources research},
+  Year                     = {2009},
+  Number                   = {11},
+  Volume                   = {45},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{pegram2001high,
+  Title                    = {High resolution space--time modelling of rainfall: the “String of Beads” model},
+  Author                   = {Pegram, GGS and Clothier, AN},
+  Journal                  = {Journal of Hydrology},
+  Year                     = {2001},
+  Number                   = {1},
+  Pages                    = {26--41},
+  Volume                   = {241},
+
+  Publisher                = {Elsevier}
+}
+
+@Article{schertzer1987physical,
+  Title                    = {Physical modeling and analysis of rain and clouds by anisotropic scaling multiplicative processes},
+  Author                   = {Schertzer, Daniel and Lovejoy, Shaun},
+  Journal                  = {J. Geophys. Res},
+  Year                     = {1987},
+  Number                   = {D8},
+  Pages                    = {9693--9714},
+  Volume                   = {92}
+}
+
+@Article{schnur1998case,
+  Title                    = {A case study of statistical downscaling in Australia using weather classification by recursive partitioning},
+  Author                   = {Schnur, Reiner and Lettenmaier, Dennis P},
+  Journal                  = {Journal of Hydrology},
+  Year                     = {1998},
+  Pages                    = {362--379},
+  Volume                   = {212},
+
+  Publisher                = {Elsevier}
+}
+
+@Article{seed2000BL,
+  Title                    = {A multiplicative broken-line model for time series of mean areal rainfall},
+  Author                   = {Seed, AW and Draper, C and Srikanthan, R and Menabde, M},
+  Journal                  = {Water Resources Research},
+  Year                     = {2000},
+  Number                   = {8},
+  Pages                    = {2395--2399},
+  Volume                   = {36},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{seed2013steps,
+  Title                    = {Formulation and evaluation of a scale decomposition-based stochastic precipitation nowcast scheme},
+  Author                   = {Seed, Alan W and Pierce, Clive E and Norman, Katie},
+  Journal                  = {Water Resources Research},
+  Year                     = {2013},
+  Number                   = {10},
+  Pages                    = {6624--6641},
+  Volume                   = {49},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{seed1999steps,
+  Title                    = {A space and time model for design storm rainfall},
+  Author                   = {Seed, Alan W and Srikanthan, R and Menabde, Merab},
+  Journal                  = {Journal of Geophysical Research: Atmospheres (1984--2012)},
+  Year                     = {1999},
+  Number                   = {D24},
+  Pages                    = {31623--31630},
+  Volume                   = {104},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{tavakol2013improved,
+  Title                    = {Improved statistical downscaling of daily precipitation using SDSM platform and data-mining methods},
+  Author                   = {Tavakol-Davani, H and Nasseri, Mohsen and Zahraie, Banafsheh},
+  Journal                  = {International Journal of Climatology},
+  Year                     = {2013},
+  Number                   = {11},
+  Pages                    = {2561--2578},
+  Volume                   = {33},
+
+  Publisher                = {Wiley Online Library}
+}
+
+@Article{xu1999gcms,
+  Title                    = {From GCMs to river flow: a review of downscaling methods and hydrologic modelling approaches},
+  Author                   = {Xu, Chong-yu},
+  Journal                  = {Progress in Physical Geography},
+  Year                     = {1999},
+  Number                   = {2},
+  Pages                    = {229--249},
+  Volume                   = {23},
+
+  Publisher                = {Sage Publications}
+}
+
